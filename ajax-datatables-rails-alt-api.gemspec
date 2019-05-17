@@ -7,11 +7,15 @@ Gem::Specification.new do |spec|
   spec.name          = "ajax-datatables-rails-alt-api"
   spec.version       = Ajax::Datatables::Rails::Alt::Api::VERSION
   spec.authors       = ["Sean McCleary"]
-  spec.email         = ["sean@tryfleet.com"]
+  spec.email         = ["seanmcc@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because RubyGems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{This is an alternate API to ajax-datatables-rails.}
+  spec.description   = <<~DESCRIPTION
+    The goal of this gem is to provide a backwards compatible extension of the
+    ajax-datatables-rails gem that provides an alternate API that reduces
+    duplication.
+  DESCRIPTION
+  spec.homepage      = "https://github.com/Shipstr/fleet/#{spec.name}"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
@@ -19,8 +23,8 @@ Gem::Specification.new do |spec|
     spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
 
     spec.metadata["homepage_uri"] = spec.homepage
-    spec.metadata["source_code_uri"] = "TODO: Put your gem's public repo URL here."
-    spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
+    spec.metadata["source_code_uri"] = spec.homepage
+    spec.metadata["changelog_uri"] = "https://raw.githubusercontent.com/fleet/#{spec.name}/master/CHANGELOG.md"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."
@@ -34,6 +38,8 @@ Gem::Specification.new do |spec|
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+
+  spec.add_dependency "ajax-datatables-rails", "~> 1.0.0"
 
   spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "rake", "~> 10.0"
