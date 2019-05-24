@@ -1,11 +1,11 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "ajax_datatables_rails_alt_api/version"
+require "ajax-datatables-rails/alt-api/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "ajax-datatables-rails-alt-api"
-  spec.version       = AjaxDatatablesRailsAltApi::VERSION
+  spec.version       = AjaxDatatablesRails::AltApi::VERSION
   spec.authors       = ["Sean McCleary"]
   spec.email         = ["seanmcc@gmail.com"]
 

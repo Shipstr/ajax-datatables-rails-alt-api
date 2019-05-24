@@ -1,6 +1,6 @@
 require 'bundler/setup'
 require 'pry'
-require 'ajax_datatables_rails_alt_api'
+require 'ajax-datatables-rails/alt_api'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
