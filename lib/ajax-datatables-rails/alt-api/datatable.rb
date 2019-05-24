@@ -40,6 +40,8 @@ module AjaxDatatablesRails
 
         # Use this in the `columns` option in the JS initialization of Datatable.
         # Call this method in the view.
+        # There are times that when conditionally showing columns, the column
+        # conditionals need access to the datatable instance.
         # Example:
         #   <table data-datatable-columns="<%= UsersDatatable.js_columns %>">
         #     <th>Name</th>
@@ -51,14 +53,22 @@ module AjaxDatatablesRails
         #       columns: JSON.parse(table.data('datatable-columns'))
         #     })
         #   </script>
-        def js_columns
-          columns.map(&:as_json).compact.to_json.html_safe
+        def js_columns(only: [], exclude: [])
+          cols = if only.present?
+                   columns.select { |c| only.include?(c.attr_name) }
+                 elsif exclude.present?
+                   columns.reject { |c| exclude.include?(c.attr_name) }
+                 else
+                   columns
+                 end
+          cols.reject! { |c| c.attr_name.to_s.starts_with?('search_only') }
+          cols.map(&:as_json).compact.to_json
         end
 
         # This is used for tests
         def column_params
           new({}).columns.map(&:as_json).each_with_index.reduce({}) do |accum, (h, i)|
-            accum[i] = {**h, search: {value: "", regex: "false"}}
+            accum[i] = { **h, search: { value: '', regex: 'false' } }
             accum
           end
         end
@@ -81,11 +91,11 @@ module AjaxDatatablesRails
         @columns ||= self.class.columns.each { |c| c.datatable = self }
       end
 
-      # There are times that when conditionally showing columns, the column conditionals
-      # need access to the datatable instance.
-      def js_columns
+      # There are times that when conditionally showing columns, the column
+      # conditionals need access to the datatable instance.
+      def js_columns(only: [], exclude: [])
         columns
-        self.class.js_columns
+        self.class.js_columns(only: only, exclude: exclude)
       end
 
       def base_model
@@ -117,7 +127,7 @@ module AjaxDatatablesRails
         end
       end
 
-      def delegate_to_view_and_record(record) # rubocop:disable Lint/UnusedMethodArgument
+      def delegate_to_view_and_record(record) # rubocop:disable Lint/MethodLength,Lint/UnusedMethodArgument
         singleton_class.class_eval do
           def method_missing(meth, *args)
             if record.respond_to?(meth)
