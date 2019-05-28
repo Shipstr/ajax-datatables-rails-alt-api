@@ -1,8 +1,8 @@
 # AjaxDatatablesRails::AltApi
 
-This is an alternative API to the [ajax-datatables-rails](https://github.com/jbox-web/ajax-datatables-rails) gem. The motivation for this was that we had a lot of datatables written against an older version of ajax-datatables-rails. The newer version of ajax-datatables-rails was incompatible with our older implementation of datatables, so it required a major refactor effort. There were certain things in the recent ajax-datatables-rails API felt redundant, and if a major refactor was needed, a reimagined API started to be devloped.
+This is an alternative API to the [ajax-datatables-rails](https://github.com/jbox-web/ajax-datatables-rails) gem. The motivation for this was that we had a lot of datatables written against an older version of ajax-datatables-rails. The newer version of ajax-datatables-rails was incompatible with our older implementation of datatables, so it required a major refactor effort. There were certain things in the recent ajax-datatables-rails API felt redundant, and if a major refactor was needed, a reimagined API started to be developed.
 
-This uses ajax-datatables-rails under the hood. Idealy, this or something similar may influence future versions of ajax-datatables-rails.
+This uses ajax-datatables-rails under the hood. Ideally, this or something similar may influence future versions of ajax-datatables-rails.
 
 ## Features
 
@@ -13,7 +13,7 @@ There are some additional features this API provides.
 * Columns are defined once, with the goal of reducing redundancy.
 * Debugging mismatch problems with jQuery datatables can be frustrating. There is some code to help debug these tricky situations. There are still many improvements that can be done with this, but it is a start.
 
-## Usage
+## Basic Usage
 
 Inside your application datatable or the individual datatables, include the module.
 
@@ -55,6 +55,48 @@ class UserDatatable < ApplicationDatatable
     # makes the address pretty
   end
 end
+```
+
+### Front-end usage
+
+Newer versions of jQuery Datatables expects the columns to be defined when the table is initialized. This gem generates that info based on the definition in the datatable.
+
+```Ruby
+# users_controller.rb
+class UsersController < ApplicationController
+  def index
+    @users_datatable = UserDatatable.new(params, view_context: view_context)
+
+    respond_to do |fmt|
+      fmt.html
+      fmt.json do
+        render json: @customer_datatable
+      end
+    end
+  end
+end
+```
+
+```ERB
+// users/index.html.erb
+
+<table id="users-datatable"
+       data-ajax-url=""
+       data-datatable-columns=<%= @users_datatable.js_columns %>>
+  <th>Name</th>
+  <th>Company</th>
+  <th>Address</th>
+  <th>Last updated</th>
+  <th>links</th>
+</table>
+
+<script>
+  $table = $('#users-datatable');
+  $table.DataTable({
+    ajax: $table.data('ajax-url'),
+    columns: $table.data('datatable-columns')
+  })
+</script>
 ```
 
 ## Development
