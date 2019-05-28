@@ -1,6 +1,6 @@
 # AjaxDatatablesRails::AltApi
 
-This is an alternative API to the `ajax-datatables-rails gem`. The motivation for this was that we had a lot of datatables written agains an older version of ajax-datatables-rails. The newer version of ajax-datatables-rails was incompatible with our older implementation of datatables, so it required a major refactor effort. There were certain things in the recent ajax-datatables-rails API felt redundant, and if a major refactor was needed, a reimagined API started to be devloped.
+This is an alternative API to the [ajax-datatables-rails](https://github.com/jbox-web/ajax-datatables-rails) gem. The motivation for this was that we had a lot of datatables written against an older version of ajax-datatables-rails. The newer version of ajax-datatables-rails was incompatible with our older implementation of datatables, so it required a major refactor effort. There were certain things in the recent ajax-datatables-rails API felt redundant, and if a major refactor was needed, a reimagined API started to be devloped.
 
 This uses ajax-datatables-rails under the hood. Idealy, this or something similar may influence future versions of ajax-datatables-rails.
 
