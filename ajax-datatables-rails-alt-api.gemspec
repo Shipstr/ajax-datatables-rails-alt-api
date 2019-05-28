@@ -15,12 +15,12 @@ Gem::Specification.new do |spec|
     ajax-datatables-rails gem that provides an alternate API that reduces
     duplication.
   DESCRIPTION
-  spec.homepage      = "https://github.com/Shipstr/fleet/#{spec.name}"
+  spec.homepage      = "https://github.com/Shipstr/#{spec.name}"
 
   if spec.respond_to?(:metadata)
     spec.metadata["homepage_uri"] = spec.homepage
     spec.metadata["source_code_uri"] = spec.homepage
-    spec.metadata["changelog_uri"] = "https://raw.githubusercontent.com/fleet/#{spec.name}/master/CHANGELOG.md"
+    spec.metadata["changelog_uri"] = "https://raw.githubusercontent.com/Shipstr/#{spec.name}/master/CHANGELOG.md"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."
