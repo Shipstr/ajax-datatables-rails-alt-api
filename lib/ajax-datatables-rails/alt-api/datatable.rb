@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'ajax-datatables-rails/alt-api/datatable/column_def'
+require 'ajax-datatables-rails/alt-api/datatable/row_context'
 require 'ajax-datatables-rails/alt-api/datatable/view_columns'
 
 module AjaxDatatablesRails
@@ -117,33 +118,15 @@ module AjaxDatatablesRails
         raise NotImplementedError if columns.empty?
 
         records_with_error_logging.map do |record|
-          @current_record = record
-          delegate_to_view_and_record(record)
+          row_context = RowContext.new(@view, record)
 
           columns.each_with_object({}) do |col, row|
-            row[col.attr_name] = col.render(record)
+            row[col.attr_name] = col.render(row_context)
             row
           end
         end
       end
 
-      def delegate_to_view_and_record(record) # rubocop:disable Lint/MethodLength,Lint/UnusedMethodArgument
-        singleton_class.class_eval do
-          def method_missing(meth, *args)
-            if record.respond_to?(meth)
-              record.send(meth, *args)
-            elsif view.respond_to?(meth)
-              view.send(meth, *args)
-            else
-              super
-            end
-          end
-
-          def respond_to_missing?(meth, _include_all)
-            record.respond_to?(meth) || view.respond_to?(meth) || super
-          end
-        end
-      end
 
       # There are some hard to debug scenarios that come up with ajax-datatables-rails.
       # This helps debug some problems. Usually the bug is caused by some mismatched
@@ -152,7 +135,7 @@ module AjaxDatatablesRails
         @records ||= records
       rescue NoMethodError => e
         if e.name == :fetch && e.receiver.nil?
-          Rails.logger.error "#{self.class.name} column problem. view_columns: #{view_columns.pretty_inspect}"
+          Rails.logger.error String.new("#{self.class.name} column problem. view_columns: #{view_columns.pretty_inspect}")
         end
         raise e
       end

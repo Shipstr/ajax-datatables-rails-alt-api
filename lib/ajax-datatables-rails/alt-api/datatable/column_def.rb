@@ -61,14 +61,16 @@ module AjaxDatatablesRails
           visible && condition_met?
         end
 
-        def render(record) # rubocop:disable Metrics/AbcSize
+        def render(row_context) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
           return unless render?
+
+          record = row_context.record
 
           if cell_renderer
             if cell_renderer.arity == 1
-              datatable.instance_exec(record, &cell_renderer)
+              row_context.instance_exec(record, &cell_renderer)
             else
-              datatable.instance_exec(&cell_renderer)
+              row_context.instance_exec(&cell_renderer)
             end
           elsif record.respond_to?(attr_name)
             record.send(attr_name)
