@@ -45,16 +45,14 @@ module AjaxDatatablesRails
 
         # Used to serialize options passed to the JS datatable initializer columns
         def as_json
-          if condition_met?
-            {data: attr_name, visible: visible, sortable: sortable}
-          end
+          { data: attr_name, visible: visible, sortable: sortable } if condition_met?
         end
 
         def view_column
-          {source: search_source,
-           orderable: to_bool(sortable),
-           searchable: to_bool(searchable),
-           cond: cond}
+          { source: search_source,
+            orderable: to_bool(sortable),
+            searchable: to_bool(searchable),
+            cond: cond }
         end
 
         def render?
@@ -85,9 +83,7 @@ module AjaxDatatablesRails
           base_model = datatable.base_model
           src = source
           src ||= "#{base_model}.#{attr_name}" if base_model
-          unless src
-            raise ColumnDefError, "Unable to infer source for column #{attr_name}"
-          end
+          raise ColumnDefError, "Unable to infer source for column #{attr_name}" unless src
 
           src
         end
