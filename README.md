@@ -2,7 +2,9 @@
 
 This is an alternative API to the [ajax-datatables-rails](https://github.com/jbox-web/ajax-datatables-rails) gem. The motivation for this was that we had a lot of datatables written against an older version of ajax-datatables-rails. The newer version of ajax-datatables-rails was incompatible with our older implementation of datatables, so it required a major refactor effort. There were certain things in the recent ajax-datatables-rails API felt redundant, and if a major refactor was needed, a reimagined API started to be developed.
 
-This uses ajax-datatables-rails under the hood. Ideally, this or something similar may influence future versions of ajax-datatables-rails.
+This uses ajax-datatables-rails under the hood. Perhaps, this or something similar may influence future versions of ajax-datatables-rails.
+
+This is compatible with ajax-datatables-rails. This is intended to replace needing to define methods like: `view_columns`, `data`, defining `def_delgators`.
 
 ## Features
 
@@ -50,9 +52,17 @@ class UserDatatable < ApplicationDatatable
                             Address.country_name
                             Address.postal_code]
 
-  # some method called by a cell renderer block
-  def format_address(address)
-    # makes the address pretty
+  # methods not available to the view some method called by a cell renderer block
+  module CellMethods
+    def format_address(address)
+      # makes the address pretty
+    end
+  end
+
+  private
+
+  def get_raw_records
+    User.includes(:address)
   end
 end
 ```
@@ -94,6 +104,8 @@ end
   $table = $('#users-datatable');
   $table.DataTable({
     ajax: $table.data('ajax-url'),
+    processing: true,
+    serverSide: true,
     columns: $table.data('datatable-columns')
   })
 </script>
