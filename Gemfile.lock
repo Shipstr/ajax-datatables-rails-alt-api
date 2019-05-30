@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ajax-datatables-rails-alt-api (0.1.3)
+    ajax-datatables-rails-alt-api (0.2)
       ajax-datatables-rails (~> 1.0.0)
 
 GEM
