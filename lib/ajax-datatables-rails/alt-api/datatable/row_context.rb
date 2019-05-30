@@ -6,7 +6,9 @@ module AjaxDatatablesRails
       class RowContext
         attr_reader :view, :record
 
-        def initialize(view, record)
+        def initialize(view, record, cell_methods_module = nil)
+          self.class.include cell_methods_module if cell_methods_module
+
           @view = view
           @record = record
         end

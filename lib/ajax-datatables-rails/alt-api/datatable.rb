@@ -118,7 +118,8 @@ module AjaxDatatablesRails
         raise NotImplementedError if columns.empty?
 
         records_with_error_logging.map do |record|
-          row_context = RowContext.new(@view, record)
+          cell_methods = self.class::CellMethods if self.class.const_defined?(:CellMethods)
+          row_context = RowContext.new(@view, record, cell_methods)
 
           columns.each_with_object({}) do |col, row|
             row[col.attr_name] = col.render(row_context)
