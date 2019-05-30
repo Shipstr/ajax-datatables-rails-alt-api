@@ -45,7 +45,7 @@ class UserDatatable < ApplicationDatatable
   column(:links, display_only: true) { link_to("Show", user_path(record)) }
 
 
-  # assuming there is an address relationship to the user, you could expose searchable attrs this way
+  # Assuming there is an address relationship to the user, you can expose searchable attributes this way.
   search_only_attributes %w[Address.city
                             Address.state_name
                             Address.country
@@ -110,6 +110,33 @@ end
   })
 </script>
 ```
+
+### Column options
+
+The `column` method can take the following arguments:
+
+| option        | type    | required | default value           | meaning                                                                                                       |
+|---------------|---------|----------|-------------------------|---------------------------------------------------------------------------------------------------------------|
+| attr_name     | String  | yes      | `nil`                   | Name of attr. This can be arbitrary, and not reflective of attributes on a model                              |
+| source        | Boolean | no       | same attr on base model | Use this if the attr_name is not on the base_model and the column needs to be searchable or sortable          |
+| sortable      | Boolean | no       | `true`                  | Do you want the model to be sortable                                                                          |
+| visible       | Boolean | no       | `true`                  | Set to false if this should not be rendered                                                                   |
+| searchable    | Boolean | no       | `true`                  | Set to false if you don't want the column to be searched                                                      |
+| condition     | Proc    | no       | `true`                  | A truthy result of the proc will render the column. This is useful if you want to conditionally show a column |
+| cond          | Symbol  | no       | default of datatables   | This is passed through to ajax-datatables-rails. It is the SQL matcher search will use                        |
+| search_only   | Boolean | no       | `true`                  | Shorthand option for do not display but make attr searchable                                                  |
+| display_only  | Boolean | no       | `true`                  | Shorthand option for display but exclude from search                                                          |
+| cell_renderer | Block   | no       | `nil`                   | This block is what renders cells. More info below                                                             |
+
+Cell rendering
+
+There are two options for this. Let the `attr_name` return the value associated with the `base_model` attribute. Or you can provide a block. The block can take an argument:
+
+`{ |current_record| current_record.name }` or no argument { name } will both behave the same. `method_missing` is used to seamlessly delegate to the `record`, `view`, or CellMethods defined on the datatable.
+
+## Testing
+
+Tests are currently, non-existent 😕. It is something I'd like to change, but I doubt will have time. This was extracted from a rails project that had around 20 complex datatables. I feel that this has been put through its paces by working for the project this was extracted from. Tests were written against that project, but since datatables is closely tied with ActiveRecord. I'd like to write tests, but so far have not had the time.
 
 ## Development
 
